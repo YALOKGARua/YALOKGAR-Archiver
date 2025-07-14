@@ -13,15 +13,13 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install dependencies
+      - name: Install vcpkg and dependencies
         run: |
-          choco install -y cmake
-          choco install -y openssl
-          choco install -y pkgconfiglite
-          choco install -y ninja
-          choco install -y zstd
+          git clone https://github.com/microsoft/vcpkg.git
+          .\vcpkg\bootstrap-vcpkg.bat
+          .\vcpkg\vcpkg install zstd:x64-windows openssl:x64-windows
       - name: Configure
-        run: cmake -S . -B build -G "Ninja" -DCMAKE_BUILD_TYPE=Release
+        run: cmake -S . -B build -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}\vcpkg\scripts\buildsystems\vcpkg.cmake
       - name: Build
         run: cmake --build build --config Release
       - name: Upload artifact

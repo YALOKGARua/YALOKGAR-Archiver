@@ -9,10 +9,10 @@ file(GLOB SOURCES "src/*.cpp")
 
 add_executable(archiver ${SOURCES} src/main.cpp)
 
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(ZSTD REQUIRED libzstd)
-include_directories(${ZSTD_INCLUDE_DIRS})
-target_link_libraries(archiver ${ZSTD_LIBRARIES})
+find_package(ZSTD REQUIRED)
+find_package(OpenSSL REQUIRED)
+
+target_link_libraries(archiver ZSTD::libzstd_static OpenSSL::SSL OpenSSL::Crypto)
 
 enable_testing()
 add_subdirectory(test) 
