@@ -8,6 +8,7 @@
 #include <atomic>
 #include <algorithm>
 #include <iostream>
+#include <sstream>
 #include <openssl/evp.h>
 #include <openssl/rand.h>
 
@@ -21,11 +22,11 @@ struct FileEntry {
   uint64_t offset;
 };
 
-void write_uint64(std::ofstream& out, uint64_t value) {
+void write_uint64(std::ostream& out, uint64_t value) {
   out.write(reinterpret_cast<const char*>(&value), sizeof(value));
 }
 
-void write_string(std::ofstream& out, const std::string& str) {
+void write_string(std::ostream& out, const std::string& str) {
   uint64_t len = str.size();
   write_uint64(out, len);
   out.write(str.data(), len);
